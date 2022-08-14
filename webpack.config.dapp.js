@@ -9,9 +9,14 @@ module.exports = {
   },
   module: {
     rules: [
-    {
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
+      },
+      {
         test: /\.(js|jsx)$/,
-        use: "babel-loader",
+        use: ["babel-loader"],
         exclude: /node_modules/
       },
       {

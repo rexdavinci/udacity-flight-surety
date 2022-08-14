@@ -3,19 +3,14 @@ import DOM from './dom';
 import Contract from './contract';
 import './flightsurety.css';
 
-
+let contract
 (async() => {
 
     let result = null;
 
-    let contract = new Contract('localhost', () => {
-
-        // Read transaction
-        contract.isOperational((error, result) => {
-            console.log(error,result);
-            display('Operational Status', 'Check if contract is operational', [ { label: 'Operational Status', error: error, value: result} ]);
-        });
-    
+    contract = new Contract('localhost', () => {
+        operational()
+        registerAirline()
 
         // User-submitted transaction
         DOM.elid('submit-oracle').addEventListener('click', () => {
@@ -27,9 +22,23 @@ import './flightsurety.css';
         })
     
     });
-    
-
 })();
+
+function operational() {
+    contract.isOperational((error, result) => {
+        console.log(error,result);
+        display('Operational Status', 'Check if contract is operational', [ { label: 'Operational Status', error: error, value: result} ]);
+    });
+}
+
+function registerAirline() {
+    DOM.elid('add-flight').addEventListener('click', () => {
+        let flight = DOM.elid('add-flight-number').value;
+        contract.registerFlight(flight, (error, result) => {
+            console.log(error, result)
+        })
+    })
+}
 
 
 function display(title, description, results) {
